@@ -24,7 +24,7 @@ def fetch_otp(count):
 
 class TokenGenerator:
     def __init__(self, mobile):
-        self.otp = sha256(fetch_otp(0)['otp'].encode('utf-8')).hexdigest()
+        # self.otp = sha256(fetch_otp(0)['otp'].encode('utf-8')).hexdigest()
         self.mobile = mobile
         self.txn_id = None
         self.token = None
@@ -57,7 +57,7 @@ class TokenGenerator:
 
     def confirm_otp(self):
         print("fetching otp...")
-        otp = sha256(fetch_otp(0).encode('utf-8')).hexdigest()
+        otp = sha256(fetch_otp(0)['otp'].encode('utf-8')).hexdigest()
         url = "https://cdn-api.co-vin.in/api/v2/auth/public/confirmOTP"
         payload = '{\n    \"otp\": \"' + otp + '\",\n    \"txnId\": \"' + self.txn_id + '\"\n}'
         headers = {

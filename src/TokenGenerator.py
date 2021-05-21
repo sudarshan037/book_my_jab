@@ -10,7 +10,8 @@ def fetch_otp(count):
     count += 1
     if count == 10:
         raise TimeoutError
-    url = "http://127.0.0.1:5000/broadcast_otp"
+    # url = "http://127.0.0.1:5000/broadcast_otp"
+    url = "http://52.172.236.68:8080/broadcast_otp"
     payload = {}
     headers = {}
     response = requests.request("GET", url, headers=headers, data=payload)

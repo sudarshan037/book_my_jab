@@ -1,4 +1,5 @@
 import traceback
+from json import JSONDecodeError
 from pprint import pprint
 from time import time
 
@@ -32,7 +33,7 @@ def get_pin():
         payload['time'] = round(time(), 2)
         pprint(payload)
         return payload
-    except Exception:
+    except JSONDecodeError:
         traceback.print_exc()
         return {
             "result": "Error Encountered"

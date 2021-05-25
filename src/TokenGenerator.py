@@ -3,6 +3,7 @@ from hashlib import sha256
 from pprint import pprint
 import time
 import requests
+import json
 
 
 def fetch_otp(count):
@@ -38,8 +39,13 @@ class TokenGenerator:
         ]
 
     def generate_otp(self):
-        url = "https://cdn-api.co-vin.in/api/v2/auth/public/generateOTP"
-        payload = "{\n    \"mobile\": \"" + self.mobile + "\"\n}"
+        # url = "https://cdn-api.co-vin.in/api/v2/auth/public/generateOTP"
+        # payload = "{\n    \"mobile\": \"" + self.mobile + "\"\n}"
+        url = "https://cdn-api.co-vin.in/api/v2/auth/generateMobileOTP"
+        payload = {
+            "mobile": self.mobile,
+            "secret": "U2FsdGVkX1+z/4Nr9nta+2DrVJSv7KS6VoQUSQ1ZXYDx/CJUkWxFYG6P3iM/VW+6jLQ9RDQVzp/RcZ8kbT41xw=="
+        }
         headers = {
             'Content-Type': 'application/json',
             'User-Agent': self.user_agents[random.randint(0, 2)]
@@ -49,7 +55,7 @@ class TokenGenerator:
             method="POST",
             url=url,
             headers=headers,
-            data=payload
+            data=json.dumps(payload)
         )
 
         pprint(response.text)
@@ -58,8 +64,13 @@ class TokenGenerator:
     def confirm_otp(self):
         print("fetching otp...")
         otp = sha256(fetch_otp(0)['otp'].encode('utf-8')).hexdigest()
-        url = "https://cdn-api.co-vin.in/api/v2/auth/public/confirmOTP"
-        payload = '{\n    \"otp\": \"' + otp + '\",\n    \"txnId\": \"' + self.txn_id + '\"\n}'
+        # url = "https://cdn-api.co-vin.in/api/v2/auth/public/confirmOTP"
+        # payload = '{\n    \"otp\": \"' + otp + '\",\n    \"txnId\": \"' + self.txn_id + '\"\n}'
+        url = "https://cdn-api.co-vin.in/api/v2/auth/validateMobileOtp"
+        payload = {
+            "otp": otp,
+            "txnId": self.txn_id
+        }
         headers = {
             'Content-Type': 'application/json',
             "User-Agent": self.user_agents[random.randint(0, 2)]
@@ -69,7 +80,7 @@ class TokenGenerator:
             method="POST",
             url=url,
             headers=headers,
-            data=payload
+            data=json.dumps(payload)
         )
 
         pprint(response.text)
